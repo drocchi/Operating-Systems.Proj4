@@ -1,6 +1,6 @@
 
 #include <time.h>
-
+#include <dirent.h>
 #include <stdlib.h>
 #include <sys/sysmacros.h>
 #include <sys/stat.h>
@@ -11,6 +11,11 @@
 
 int main( int argc, char **argv ) {
 
+	//If no argument just print all filenames
+	if (argc == 1){
+
+
+	}
 	struct stat staty;
 	char pathHolder[PATH_MAX] = "";
 
@@ -20,7 +25,15 @@ int main( int argc, char **argv ) {
 	}
 
 
-
+  DIR *d;
+  struct dirent *dir;
+  d = opendir(".");
+  if (d){
+      while ((dir = readdir(d)) != NULL){
+          printf("%s\n", dir->d_name);
+      }
+      closedir(d);
+  }
 
 	printf("%s\n", argv[1]);
 	printf("file size: %ld\n", (long) staty.st_size);
@@ -28,8 +41,11 @@ int main( int argc, char **argv ) {
 	printf("reference link count: %ld\n", (long) staty.st_nlink);
 	printf("file permissions: UID=%ld, GID=%ld\n", (long) staty.st_uid, (long)staty.st_gid);
 	printf("file inode: %ld\n", (long) staty.st_ino);
-	if (getcwd(pathHolder, sizeof(pathHolder) != NULL)){
-		printf("current dir: %S\n", pathHolder);
-	}
+
+
+	getcwd( pathHolder, PATH_MAX );
+  printf("Current working dir: %s\n", pathHolder);
+
+
 	return 0;
 }
