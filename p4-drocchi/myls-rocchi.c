@@ -19,7 +19,7 @@ int main( int argc, char **argv ) {
 
   DIR *current;
   struct dirent *dir;
-
+	getcwd( pathHolder, PATH_MAX );
 	//Establishes file to be read + whether or not to read file details
 	switch(argc){
 		case 1:
@@ -53,19 +53,21 @@ int main( int argc, char **argv ) {
 	} else{
 		printf("All files in directory: \n");
 		while ((dir = readdir(current)) != NULL){	
-			strncpy(path, argv[2], PATH_MAX);
-			printf("\n%s\n", strcat(path,dir->d_name));
 
-			if(stat(path, &staty) == -1){
+			printf("file name: %s\n", dir->d_name);
+
+			if(stat(dir->d_name, &staty) == -1){
 				printf("bad filepath. exiting\n");
 				exit(EXIT_FAILURE);
 			}
 
+			
 			printf("file size: %ld\n", (long) staty.st_size);
 			printf("number of blocks allocated: %lld\n", (long long)staty.st_blocks);
 			printf("reference link count: %ld\n", (long) staty.st_nlink);
 			printf("file permissions: UID=%ld, GID=%ld\n", (long) staty.st_uid, (long)staty.st_gid);
 			printf("file inode: %ld\n", (long) staty.st_ino);
+			printf("file size in bytes: %ld\n\n", (long) dir->d_reclen);
 		}
 
 	}
